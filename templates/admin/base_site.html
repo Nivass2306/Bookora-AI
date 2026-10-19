@@ -1,0 +1,5 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+{% block extrahead %}{{ block.super }}<link rel="icon" href="{% static 'store/favicon.svg' %}" type="image/svg+xml">{% endblock %}
+{% block branding %}<h1 id="site-name"><a href="{% url 'admin:index' %}">Bookora AI · Staff portal</a></h1>{% endblock %}
+{% block nav-global %}<a href="{% url 'staff_reports' %}" style="color:inherit;padding:8px 14px">Store reports</a>{% endblock %}

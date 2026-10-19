@@ -1,0 +1,20 @@
+{% extends 'store/base.html' %}
+{% block content %}
+<section class="page-heading wrap">
+  <span class="eyebrow">DEMONSTRATION CHECKOUT</span>
+  <h1>Review your print order</h1>
+  <p>This demo places an unpaid print order. No payment is collected, and it does not grant online reading access.</p>
+</section>
+<section class="wrap checkout-layout">
+  <form class="form-card" method="post">
+    {% csrf_token %}<h2>Delivery details</h2>{{ form.as_p }}
+    <button class="button">Place demo order</button>
+  </form>
+  <aside class="cart-summary">
+    <h2>Print copies</h2>
+    {% for row in rows %}<p>{{ row.book.title }} &times; {{ row.quantity }} <strong>&#8377;{{ row.subtotal }}</strong></p>{% endfor %}
+    <hr><p class="total-line">Total <strong>&#8377;{{ total }}</strong></p>
+    <small>Online access is separate from these print copies.</small>
+  </aside>
+</section>
+{% endblock %}

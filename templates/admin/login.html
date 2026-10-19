@@ -1,0 +1,14 @@
+{% extends 'admin/base_site.html' %}
+{% load i18n %}
+{% block bodyclass %}{{ block.super }} login{% endblock %}
+{% block content_title %}<h1>Bookora staff sign in</h1>{% endblock %}
+{% block content %}
+<p>Authorized staff access only. Customer accounts cannot enter the staff portal.</p>
+{% if form.errors and not form.non_field_errors %}<p class="errornote">Your username and password did not match. Please try again.</p>{% endif %}
+{% if form.non_field_errors %}<p class="errornote">{{ form.non_field_errors }}</p>{% endif %}
+<div id="content-main"><form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+  <div class="form-row">{{ form.username.errors }}<label for="id_username">Staff username:</label>{{ form.username }}</div>
+  <div class="form-row">{{ form.password.errors }}<label for="id_password">Password:</label>{{ form.password }}<input type="hidden" name="next" value="{{ next }}"></div>
+  <div class="submit-row"><input type="submit" value="Sign in"></div>
+</form></div>
+{% endblock %}

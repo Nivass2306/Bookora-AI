@@ -1,0 +1,32 @@
+{% extends 'store/base.html' %}
+{% block content %}
+<section class="page-heading wrap"><span class="eyebrow">YOUR READING LIST</span><h1>Your bag</h1></section>
+<section class="wrap cart-page">
+  {% if rows %}
+    <div class="cart-items">
+      {% for row in rows %}
+        <article class="cart-item">
+          <div class="mini-cover">{{ row.book.title|first }}</div>
+          <div class="cart-book">
+            <a href="{% url 'book_detail' row.book.pk %}">{{ row.book.title }}</a>
+            <span>{{ row.book.author }} &middot; Print copy &middot; &#8377;{{ row.book.price }}</span>
+            <small>Online reading access is separate from this print order.</small>
+            <form method="post" action="{% url 'cart_update' row.book.pk %}">{% csrf_token %}<label>Quantity <input type="number" name="quantity" value="{{ row.quantity }}" min="0" max="99"></label><button class="text-button">Update</button></form>
+          </div>
+          <strong>&#8377;{{ row.subtotal }}</strong>
+          <form method="post" action="{% url 'cart_remove' row.book.pk %}">{% csrf_token %}<button class="text-button">Remove</button></form>
+        </article>
+      {% endfor %}
+    </div>
+    <aside class="cart-summary">
+      <h2>Order summary</h2><p>Subtotal <strong>&#8377;{{ total }}</strong></p>
+      <p>Shipping <strong>Calculated at checkout</strong></p><hr>
+      <p class="total-line">Total <strong>&#8377;{{ total }}</strong></p>
+      <a class="button full-button" href="{% url 'checkout' %}">Continue to checkout</a>
+      <small>Demo checkout only &middot; no payment collected or digital access granted</small>
+    </aside>
+  {% else %}
+    <div class="empty-panel"><h2>Your bag is waiting for a story.</h2><p>Add a print copy and it will be here.</p><a class="button" href="{% url 'catalogue' %}">Browse books</a></div>
+  {% endif %}
+</section>
+{% endblock %}

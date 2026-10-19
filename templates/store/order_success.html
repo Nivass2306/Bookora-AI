@@ -1,0 +1,15 @@
+{% extends 'store/base.html' %}
+{% block content %}
+<section class="success-page">
+  <div class="success-icon" aria-hidden="true">&#10003;</div>
+  <span class="eyebrow">{{ order.get_status_display|upper }}</span>
+  <h1>Your demo order was recorded.</h1>
+  <p>This is not a payment confirmation. No payment was taken. A print order does not grant online reading access.</p>
+  <div class="order-reference">Order reference <strong>{{ order.reference }}</strong></div>
+  <div class="order-summary">
+    {% for item in order.items.all %}<p>{{ item.title }} &times; {{ item.quantity }} <strong>&#8377;{{ item.price }}</strong></p>{% endfor %}
+    <hr><p>Total <strong>&#8377;{{ order.total }}</strong></p>
+  </div>
+  <a class="button" href="{% url 'catalogue' %}">Keep exploring</a>
+</section>
+{% endblock %}

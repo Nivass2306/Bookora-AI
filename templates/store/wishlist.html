@@ -1,0 +1,9 @@
+{% extends 'store/base.html' %}
+{% block title %}Your wishlist | Bookora AI{% endblock %}
+{% block content %}
+<section class="page-heading wrap"><span class="eyebrow">YOUR PERSONAL BOOKSHELF</span><h1>Your wishlist</h1><p>Books you have saved for later.</p></section>
+<section class="wrap wishlist-page">
+  {% if wishlist_books %}<div class="book-grid">{% for book in wishlist_books %}{% include 'store/_book_card.html' %}{% endfor %}</div>
+  {% else %}<div class="wishlist-empty"><span class="eyebrow">A SHELF FOR LATER</span><h2>No saved books yet</h2><p>Save a book from its details page or catalogue card and it will be waiting here.</p><a class="button" href="{% url 'catalogue' %}">Browse the collection</a></div>{% endif %}
+</section>
+{% endblock %}

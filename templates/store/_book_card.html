@@ -1,0 +1,25 @@
+{% load static %}
+<article class="book-card">
+  <a class="cover-link" href="{% url 'book_detail' book.pk %}" aria-label="View {{ book.title }} by {{ book.author }}">
+    {% if book.category.slug == 'fiction' %}{% static 'store/covers/fiction.svg' as fallback_cover %}
+    {% elif book.category.slug == 'non-fiction' %}{% static 'store/covers/nonfiction.svg' as fallback_cover %}
+    {% elif book.category.slug == 'education' %}{% static 'store/covers/education.svg' as fallback_cover %}
+    {% elif book.category.slug == 'technology' %}{% static 'store/covers/technology.svg' as fallback_cover %}
+    {% else %}{% static 'store/covers/abstract.svg' as fallback_cover %}{% endif %}
+    <div class="book-cover">
+      <img class="cover-art" src="{% if book.cover_image %}{{ book.cover_image }}{% else %}{{ fallback_cover }}{% endif %}" data-fallback="{{ fallback_cover }}" alt="Cover art for {{ book.title }}" loading="lazy" onerror="this.onerror=null;this.src=this.dataset.fallback">
+      <span class="cover-overlay"><span class="cover-title">{{ book.title }}</span><span class="cover-author">{{ book.author }}</span></span>
+    </div>
+  </a>
+  <div class="book-meta">
+    <span class="book-category">{{ book.category.name }}</span>
+    <a class="book-title" href="{% url 'book_detail' book.pk %}">{{ book.title }}</a>
+    <span class="book-author">{{ book.author }}</span>
+    <div class="book-buy"><strong><span class="price-kind">Print copy</span> &#8377;{{ book.price }}</strong><a class="details-link" href="{% url 'book_detail' book.pk %}">Details</a></div>
+    <span class="access-badge access-{{ book.reading_access }}">{% if book.subscription_included and book.reading_access == 'premium' and book.has_readable_content %}Included in Online Subscription{% elif book.has_readable_content %}{{ book.get_reading_access_display }}{% elif book.reading_access == 'free' %}Free access · no digital edition{% elif book.reading_access == 'purchase' %}Print purchase · no digital edition{% else %}Premium · no digital edition{% endif %}</span>
+    <div class="book-actions">
+      {% if show_read_action %}{% if book.has_readable_content %}<a class="add-button" href="{% url 'reader' book.pk %}">Read online</a>{% else %}<span class="muted">Digital edition unavailable</span>{% endif %}{% else %}<form method="post" action="{% url 'cart_add' book.pk %}">{% csrf_token %}<input type="hidden" name="quantity" value="1"><input type="hidden" name="next" value="{{ request.get_full_path }}"><button class="add-button">Add to bag</button></form>{% if book.has_readable_content and book.reading_access == 'free' or book.has_readable_content and book.subscription_included and book.reading_access == 'premium' %}<a class="details-link" href="{% url 'reader' book.pk %}">Read online</a>{% endif %}{% endif %}
+      {% if user.is_authenticated %}<form method="post" action="{% url 'wishlist_toggle' book.pk %}">{% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}"><button class="save-button" aria-label="{% if book.pk in wishlist_ids %}Remove {{ book.title }} from wishlist{% else %}Save {{ book.title }} to wishlist{% endif %}" aria-pressed="{% if book.pk in wishlist_ids %}true{% else %}false{% endif %}">{% if book.pk in wishlist_ids %}Saved{% else %}Save{% endif %}</button></form>{% else %}<a class="save-button" href="{% url 'login' %}?next={{ request.get_full_path|urlencode }}" aria-label="Log in to save {{ book.title }}">Save</a>{% endif %}
+    </div>
+  </div>
+</article>

@@ -1,0 +1,104 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block title %}Bookora AI | Find a story worth keeping{% endblock %}
+{% block extra_head %}<link href="{% static 'store/homepage.css' %}" rel="stylesheet">{% endblock %}
+{% block content %}
+<div class="home-page">
+  <section class="home-hero" aria-labelledby="home-title">
+    <div class="wrap home-hero-inner">
+      <div class="home-hero-copy">
+        <span class="eyebrow">A GOOD BOOK CHANGES EVERYTHING</span>
+        <h1 id="home-title">Find the story<br>that <em>finds you.</em></h1>
+        <p>Thoughtful reads for curious minds. Explore stories, ideas, and new worlds, then keep the ones that stay with you.</p>
+        <form class="home-search" action="{% url 'catalogue' %}" method="get">
+          <label class="sr-only" for="home-search">Search by book title or author</label>
+          <input id="home-search" type="search" name="q" placeholder="Search by title, author, or idea">
+          <button type="submit">Find a book <span aria-hidden="true">&#8594;</span></button>
+        </form>
+        <a class="home-text-link" href="{% url 'catalogue' %}">Explore the collection <span aria-hidden="true">&#8599;</span></a>
+        <div class="home-hero-note"><span aria-hidden="true">✳</span> A little more wonder, one page at a time.</div>
+      </div>
+
+      <div class="home-hero-art" aria-label="A selection of books from the Bookora catalogue">
+        <div class="home-art-orbit home-art-orbit-one" aria-hidden="true"></div>
+        <div class="home-art-orbit home-art-orbit-two" aria-hidden="true"></div>
+        {% if bestsellers.1 %}{% with book=bestsellers.1 %}
+          <a class="home-cover home-cover-back" href="{% url 'book_detail' book.pk %}" aria-label="Explore {{ book.title }} by {{ book.author }}">
+            {% if book.cover_image %}<img src="{{ book.cover_image }}" data-fallback="{% static 'store/covers/abstract.svg' %}" alt="Cover art for {{ book.title }}" onerror="this.onerror=null;this.src=this.dataset.fallback">{% elif book.category.slug == 'fiction' %}<img src="{% static 'store/covers/fiction.svg' %}" alt="Illustrated cover for {{ book.title }}">{% elif book.category.slug == 'non-fiction' %}<img src="{% static 'store/covers/nonfiction.svg' %}" alt="Illustrated cover for {{ book.title }}">{% elif book.category.slug == 'education' %}<img src="{% static 'store/covers/education.svg' %}" alt="Illustrated cover for {{ book.title }}">{% elif book.category.slug == 'technology' %}<img src="{% static 'store/covers/technology.svg' %}" alt="Illustrated cover for {{ book.title }}">{% else %}<img src="{% static 'store/covers/abstract.svg' %}" alt="Illustrated cover for {{ book.title }}">{% endif %}
+          </a>
+        {% endwith %}{% endif %}
+        {% if new_arrivals.0 %}{% with book=new_arrivals.0 %}
+          <a class="home-cover home-cover-side" href="{% url 'book_detail' book.pk %}" aria-label="Explore {{ book.title }} by {{ book.author }}">
+            {% if book.cover_image %}<img src="{{ book.cover_image }}" data-fallback="{% static 'store/covers/abstract.svg' %}" alt="Cover art for {{ book.title }}" onerror="this.onerror=null;this.src=this.dataset.fallback">{% elif book.category.slug == 'fiction' %}<img src="{% static 'store/covers/fiction.svg' %}" alt="Illustrated cover for {{ book.title }}">{% elif book.category.slug == 'non-fiction' %}<img src="{% static 'store/covers/nonfiction.svg' %}" alt="Illustrated cover for {{ book.title }}">{% elif book.category.slug == 'education' %}<img src="{% static 'store/covers/education.svg' %}" alt="Illustrated cover for {{ book.title }}">{% elif book.category.slug == 'technology' %}<img src="{% static 'store/covers/technology.svg' %}" alt="Illustrated cover for {{ book.title }}">{% else %}<img src="{% static 'store/covers/abstract.svg' %}" alt="Illustrated cover for {{ book.title }}">{% endif %}
+          </a>
+        {% endwith %}{% endif %}
+        {% if featured_spotlight %}{% with book=featured_spotlight %}
+          <a class="home-cover home-cover-front" href="{% url 'book_detail' book.pk %}" aria-label="Editor's pick: {{ book.title }} by {{ book.author }}">
+            {% if book.cover_image %}<img src="{{ book.cover_image }}" data-fallback="{% static 'store/covers/abstract.svg' %}" alt="Cover art for {{ book.title }}" onerror="this.onerror=null;this.src=this.dataset.fallback">{% elif book.category.slug == 'fiction' %}<img src="{% static 'store/covers/fiction.svg' %}" alt="Illustrated cover for {{ book.title }}">{% elif book.category.slug == 'non-fiction' %}<img src="{% static 'store/covers/nonfiction.svg' %}" alt="Illustrated cover for {{ book.title }}">{% elif book.category.slug == 'education' %}<img src="{% static 'store/covers/education.svg' %}" alt="Illustrated cover for {{ book.title }}">{% elif book.category.slug == 'technology' %}<img src="{% static 'store/covers/technology.svg' %}" alt="Illustrated cover for {{ book.title }}">{% else %}<img src="{% static 'store/covers/abstract.svg' %}" alt="Illustrated cover for {{ book.title }}">{% endif %}
+          </a>
+        {% endwith %}{% elif bestsellers.0 %}{% with book=bestsellers.0 %}
+          <a class="home-cover home-cover-front" href="{% url 'book_detail' book.pk %}" aria-label="Explore {{ book.title }} by {{ book.author }}">
+            {% if book.cover_image %}<img src="{{ book.cover_image }}" data-fallback="{% static 'store/covers/abstract.svg' %}" alt="Cover art for {{ book.title }}" onerror="this.onerror=null;this.src=this.dataset.fallback">{% elif book.category.slug == 'fiction' %}<img src="{% static 'store/covers/fiction.svg' %}" alt="Illustrated cover for {{ book.title }}">{% elif book.category.slug == 'non-fiction' %}<img src="{% static 'store/covers/nonfiction.svg' %}" alt="Illustrated cover for {{ book.title }}">{% elif book.category.slug == 'education' %}<img src="{% static 'store/covers/education.svg' %}" alt="Illustrated cover for {{ book.title }}">{% elif book.category.slug == 'technology' %}<img src="{% static 'store/covers/technology.svg' %}" alt="Illustrated cover for {{ book.title }}">{% else %}<img src="{% static 'store/covers/abstract.svg' %}" alt="Illustrated cover for {{ book.title }}">{% endif %}
+          </a>
+        {% endwith %}{% elif new_arrivals.0 %}{% with book=new_arrivals.0 %}
+          <a class="home-cover home-cover-front" href="{% url 'book_detail' book.pk %}" aria-label="Explore {{ book.title }} by {{ book.author }}">
+            {% if book.cover_image %}<img src="{{ book.cover_image }}" data-fallback="{% static 'store/covers/abstract.svg' %}" alt="Cover art for {{ book.title }}" onerror="this.onerror=null;this.src=this.dataset.fallback">{% elif book.category.slug == 'fiction' %}<img src="{% static 'store/covers/fiction.svg' %}" alt="Illustrated cover for {{ book.title }}">{% elif book.category.slug == 'non-fiction' %}<img src="{% static 'store/covers/nonfiction.svg' %}" alt="Illustrated cover for {{ book.title }}">{% elif book.category.slug == 'education' %}<img src="{% static 'store/covers/education.svg' %}" alt="Illustrated cover for {{ book.title }}">{% elif book.category.slug == 'technology' %}<img src="{% static 'store/covers/technology.svg' %}" alt="Illustrated cover for {{ book.title }}">{% else %}<img src="{% static 'store/covers/abstract.svg' %}" alt="Illustrated cover for {{ book.title }}">{% endif %}
+          </a>
+        {% endwith %}{% else %}
+          <img class="home-art-empty" src="{% static 'store/reading-nook.svg' %}" alt="A calm reading corner" width="520" height="420">
+        {% endif %}
+        <div class="home-art-caption"><span class="eyebrow">YOUR NEXT CHAPTER</span><strong>Make room for a new favorite.</strong></div>
+        {% if featured_spotlight %}<a class="home-art-label" href="{% url 'book_detail' featured_spotlight.pk %}"><span>EDITOR'S PICK</span><strong>{{ featured_spotlight.title }}</strong></a>{% endif %}
+      </div>
+    </div>
+  </section>
+
+  {% if continue_reading %}<section class="section wrap home-continue" aria-labelledby="continue-heading"><div class="section-head"><div><span class="eyebrow">WELCOME BACK</span><h2 id="continue-heading">Continue reading</h2></div><a class="home-text-link" href="{% url 'account' %}">Your reading shelf <span aria-hidden="true">&#8594;</span></a></div><div class="continue-list">{% for progress in continue_reading %}<a href="{% url 'reader' progress.book_id %}?section={{ progress.section_index }}"><strong>{{ progress.book.title }}</strong><span>Section {{ progress.section_index|add:1 }}{% if progress.bookmark_section_index != None %} &middot; bookmarked section {{ progress.bookmark_section_index|add:1 }}{% endif %}</span></a>{% endfor %}</div></section>{% endif %}
+
+  <section class="home-discovery" aria-labelledby="discovery-title">
+    <div class="wrap home-discovery-inner">
+      <div class="home-discovery-copy"><span class="eyebrow">A THOUGHTFUL PLACE TO START</span><h2 id="discovery-title">What are you in the mood to read?</h2><p>Tell Bookora what you enjoy. Recommendations are grounded in books and audio currently listed in our catalogue.</p>
+        <div class="home-prompts" aria-label="Suggested reading prompts"><button type="button" data-prompt="A thoughtful novel for a quiet weekend">A quiet weekend</button><button type="button" data-prompt="Beginner-friendly books about technology">Learn something</button><button type="button" data-prompt="Books I can read for free">Read for free</button></div>
+      </div>
+      <div class="home-discovery-panel">
+        <form id="home-discovery-form" data-url="{% url 'bookstore_chat' %}" data-rate-limit="12" method="post">
+          {% csrf_token %}<label for="home-discovery-input">Describe a topic, mood, or kind of book</label>
+          <div class="home-discovery-entry"><input id="home-discovery-input" name="message" type="text" maxlength="500" required placeholder="e.g. a gentle introduction to astronomy"><button type="submit">Find my reads <span aria-hidden="true">&#8594;</span></button></div>
+          <p class="home-discovery-hint">Bookora can suggest catalogue matches; it cannot change orders or grant access.</p>
+        </form>
+        <div id="home-discovery-result" class="home-discovery-result" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+      </div>
+    </div>
+  </section>
+
+  {% if featured_spotlight %}<section class="spotlight-section wrap home-spotlight" aria-labelledby="spotlight-heading">
+    <div class="spotlight-label"><span class="eyebrow">EDITOR'S PICK</span><span class="spotlight-rule"></span></div>
+    <div class="spotlight-cover"><a href="{% url 'book_detail' featured_spotlight.pk %}" aria-label="Read about {{ featured_spotlight.title }}">
+      {% if featured_spotlight.cover_image %}<img src="{{ featured_spotlight.cover_image }}" data-fallback="{% static 'store/covers/abstract.svg' %}" alt="Cover art for {{ featured_spotlight.title }}" onerror="this.onerror=null;this.src=this.dataset.fallback">{% elif featured_spotlight.category.slug == 'fiction' %}<img src="{% static 'store/covers/fiction.svg' %}" alt="Illustrated fiction cover">{% elif featured_spotlight.category.slug == 'non-fiction' %}<img src="{% static 'store/covers/nonfiction.svg' %}" alt="Illustrated non-fiction cover">{% elif featured_spotlight.category.slug == 'education' %}<img src="{% static 'store/covers/education.svg' %}" alt="Illustrated education cover">{% elif featured_spotlight.category.slug == 'technology' %}<img src="{% static 'store/covers/technology.svg' %}" alt="Illustrated technology cover">{% else %}<img src="{% static 'store/covers/abstract.svg' %}" alt="Illustrated book cover">{% endif %}
+    </a></div>
+    <div class="spotlight-copy"><span class="eyebrow">A BOOK TO BEGIN WITH</span><h2 id="spotlight-heading">{{ featured_spotlight.title }}</h2><p class="spotlight-author">by {{ featured_spotlight.author }}</p><p>{{ featured_spotlight.description|truncatewords:38 }}</p><div class="spotlight-meta"><span>{{ featured_spotlight.category.name }}</span><strong>&#8377;{{ featured_spotlight.price }}</strong></div><div class="spotlight-actions"><a class="button" href="{% url 'book_detail' featured_spotlight.pk %}">Discover this book</a><form method="post" action="{% url 'cart_add' featured_spotlight.pk %}">{% csrf_token %}<input type="hidden" name="quantity" value="1"><input type="hidden" name="next" value="{{ request.get_full_path }}"><button class="button button-outline">Add to bag</button></form></div></div>
+  </section>{% endif %}
+
+  <section class="bestseller-band" id="best-sellers" aria-labelledby="bestseller-heading"><div class="wrap">
+    <div class="section-head"><div><span class="eyebrow">READER FAVORITES</span><h2 id="bestseller-heading">Best sellers</h2><p class="muted">Ranked by recorded fulfilled orders.</p></div>{% if bestsellers %}<div class="rail-controls"><button type="button" data-scroll-rail="bestseller-rail" aria-label="Scroll best sellers left">&#8592;</button><button type="button" data-scroll-rail="bestseller-rail" data-direction="next" aria-label="Scroll best sellers right">&#8594;</button></div>{% endif %}</div>
+    <div class="book-rail" id="bestseller-rail" role="region" aria-label="Best selling books" tabindex="0">{% for book in bestsellers %}{% include 'store/_book_card.html' %}{% empty %}<p class="empty">Our first best seller is waiting to be discovered.</p>{% endfor %}</div>
+  </div></section>
+
+  <section class="section wrap home-section" id="new-arrivals"><div class="section-head"><div><span class="eyebrow">FRESH OFF THE SHELF</span><h2>New arrivals</h2></div><a href="{% url 'catalogue' %}?sort=-created_at" class="home-text-link">See the latest <span aria-hidden="true">&#8599;</span></a></div><div class="book-grid">{% for book in new_arrivals %}{% include 'store/_book_card.html' %}{% empty %}<p class="empty">New arrivals will show up here.</p>{% endfor %}</div></section>
+
+  {% if featured %}<section class="section featured-section home-section"><div class="wrap"><div class="section-head"><div><span class="eyebrow">HANDPICKED FOR YOU</span><h2>More featured reads</h2></div><a href="{% url 'catalogue' %}" class="home-text-link">All books <span aria-hidden="true">&#8599;</span></a></div><div class="book-grid">{% for book in featured %}{% include 'store/_book_card.html' %}{% endfor %}</div></div></section>{% endif %}
+
+  <section class="section wrap categories-section home-section"><div class="section-head"><div><span class="eyebrow">A PLACE TO BEGIN</span><h2>Browse by category</h2></div><a class="home-text-link" href="{% url 'catalogue' %}">All books <span aria-hidden="true">&#8599;</span></a></div><div class="category-grid">{% for category in categories %}<a class="category-tile" href="{% url 'category' category.slug %}"><span>{{ category.name }}</span><small>{{ category.book_count }} {% if category.book_count == 1 %}book{% else %}books{% endif %}</small><i aria-hidden="true">&#8599;</i></a>{% empty %}<p class="empty">Categories are being curated.</p>{% endfor %}</div></section>
+
+  <section class="section access-collection home-section"><div class="wrap"><div class="section-head"><div><span class="eyebrow">OPEN A FREE BOOK</span><h2>Free to read</h2></div><a class="home-text-link" href="{% url 'free_reads' %}">All free reads <span aria-hidden="true">&#8594;</span></a></div><div class="book-grid">{% for book in free_reads %}{% include 'store/_book_card.html' %}{% empty %}<p class="empty">Free reading selections will appear here when authorized content is added.</p>{% endfor %}</div></div></section>
+
+  <section class="section access-collection premium-collection home-section"><div class="wrap"><div class="section-head"><div><span class="eyebrow">MEMBER COLLECTION</span><h2>Premium reads</h2></div><a class="home-text-link" href="{% url 'subscription' %}">Explore demo Premium <span aria-hidden="true">&#8594;</span></a></div><div class="book-grid">{% for book in premium_reads %}{% include 'store/_book_card.html' %}{% empty %}<p class="empty">Premium selections are being curated.</p>{% endfor %}</div></div></section>
+
+  <section class="section wrap audio-collection home-section"><div class="section-head"><div><span class="eyebrow">LISTEN TO A STORY</span><h2>Audiobooks</h2></div><a class="home-text-link" href="{% url 'audiobooks' %}">Explore audiobooks <span aria-hidden="true">&#8594;</span></a></div><div class="audio-grid">{% for audiobook in audiobook_spotlight %}<a class="audio-card" href="{% url 'audiobook_detail' audiobook.pk %}"><span class="audio-card-icon" aria-hidden="true">&#9835;</span><span class="eyebrow">{{ audiobook.book.category.name }}</span><strong>{{ audiobook.book.title }}</strong><span>by {{ audiobook.book.author }}</span><small>{% if audiobook.playable %}Audio available{% else %}Recording unavailable{% endif %}</small></a>{% empty %}<p class="empty">Audiobook listings will appear here. Playback is shown only when an authorized recording is added.</p>{% endfor %}</div></section>
+
+  <section class="ai-banner home-ai-banner"><div class="wrap ai-inner"><div class="ai-symbol" aria-hidden="true">&#10022;</div><div><span class="eyebrow">MEET YOUR READING COMPANION</span><h2>Choose a book. Get to know it.</h2><p>Bookora AI can help you explore a book's overview, themes, and who may enjoy it, based on catalogue details.</p>{% if ai_available %}<p class="ai-status">AI summaries can be requested on selected book pages. Availability depends on the live service.</p>{% else %}<p class="ai-status">AI summaries are not configured right now. Book pages still include the full publisher description.</p>{% endif %}<div class="ai-picks">{% for book in ai_books %}<a href="{% url 'book_detail' book.pk %}">{{ book.title }} <span aria-hidden="true">&rarr;</span></a>{% empty %}<a href="{% url 'catalogue' %}">Explore the catalogue <span aria-hidden="true">&rarr;</span></a>{% endfor %}</div></div><a class="button button-light" href="{% url 'catalogue' %}">Explore the collection</a></div></section>
+
+  <section class="newsletter-band home-newsletter"><div class="wrap newsletter-inner"><div><span class="eyebrow">A LETTER FOR READERS</span><h2>A little more wonder in your inbox.</h2><p>New reads, thoughtful notes, no noise.</p></div><form class="newsletter newsletter-large" method="post" action="{% url 'newsletter' %}">{% csrf_token %}{{ newsletter_form.email }}<input type="hidden" name="next" value="{{ request.path }}"><button type="submit">Subscribe <span aria-hidden="true">&rarr;</span></button></form></div></section>
+</div>
+{% endblock %}
+{% block page_scripts %}<script src="{% static 'store/homepage.js' %}" defer></script>{% endblock %}

@@ -1,0 +1,3 @@
+{% extends 'store/base.html' %}
+{% block title %}Subscription Refund Review | Bookora AI{% endblock %}
+{% block content %}<section class="form-page"><form method="post" class="form-card"><span class="eyebrow">SUBSCRIPTION REFUND</span><h1>Request a review</h1><p>Requests are pending until staff reviews them. Approval is not confirmation that money was refunded. Physical print orders use a separate process.</p>{% csrf_token %}{{ form.as_p }}<button class="button">Submit refund request</button></form></section>{% endblock %}

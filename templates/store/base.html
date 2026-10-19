@@ -1,0 +1,47 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Bookora AI | Stories worth keeping{% endblock %}</title>
+  <meta name="description" content="Discover your next favorite book at Bookora AI.">
+  <link rel="icon" href="{% static 'store/favicon.svg' %}" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="{% static 'store/site.css' %}" rel="stylesheet">
+  <link href="{% static 'store/enhancements.css' %}" rel="stylesheet">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="{% url 'home' %}" aria-label="Bookora AI home"><span class="brand-mark">B</span> bookora<span class="brand-ai">AI</span></a>
+    <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="main-navigation">Menu</button>
+    <nav id="main-navigation" aria-label="Main navigation">
+      <a href="{% url 'home' %}">Home</a><a href="{% url 'catalogue' %}">Books</a>
+      <div class="nav-categories"><a href="{% url 'catalogue' %}">Categories</a><div class="dropdown">{% for c in nav_categories %}<a href="{% url 'category' c.slug %}">{{ c.name }}</a>{% empty %}<a href="{% url 'catalogue' %}">Explore books</a>{% endfor %}</div></div>
+      <div class="nav-categories"><a href="{% url 'free_reads' %}">Discover</a><div class="dropdown"><a href="{% url 'free_reads' %}">Free Reads</a><a href="{% url 'online_library' %}">Online Library</a><a href="{% url 'subscription' %}">Reading subscription</a><a href="{% url 'audiobooks' %}">Audiobooks</a><a href="{% url 'reading_companion' %}">Reading Companion</a><a href="{% url 'catalogue' %}?sort=popular">Best Sellers</a><a href="{% url 'catalogue' %}?sort=-created_at">New Arrivals</a></div></div>
+      <a href="{% url 'bookstore_chat_page' %}">Ask Bookora</a>
+      <a href="{% url 'about' %}">About</a><a href="{% url 'contact' %}">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      {% if user.is_authenticated %}<a class="nav-login" href="{% url 'account' %}">Account</a><a class="nav-login" href="{% url 'wishlist' %}">Wishlist</a><span class="hello">Hi, {{ user.username }}</span><form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="nav-login" type="submit">Log out</button></form>
+      {% else %}<a class="nav-login" href="{% url 'login' %}">Log in</a>{% endif %}
+      <a class="cart-link" href="{% url 'cart' %}">Bag <span>{{ cart_count }}</span></a>
+    </div>
+  </header>
+  <main>
+    {% if messages %}<div class="messages wrap" role="status" aria-live="polite">{% for message in messages %}<div class="alert {{ message.tags }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="footer">
+    <div class="wrap footer-grid">
+      <div><a class="brand footer-brand" href="{% url 'home' %}"><span class="brand-mark">B</span> bookora<span class="brand-ai">AI</span></a><p>A little more wonder in every day.</p></div>
+      <div><strong>Explore</strong><a href="{% url 'catalogue' %}">All books</a><a href="{% url 'free_reads' %}">Free Reads</a><a href="{% url 'online_library' %}">Online Library</a><a href="{% url 'audiobooks' %}">Audiobooks</a><a href="{% url 'reading_companion' %}">Reading Companion</a><a href="{% url 'subscription' %}">Reading subscription</a><a href="{% url 'about' %}">About us</a><a href="{% url 'contact' %}">Contact</a></div>
+      <div><strong>Stay in the story</strong><p>Notes on new reads, sent occasionally.</p><form class="newsletter" method="post" action="{% url 'newsletter' %}">{% csrf_token %}{{ newsletter_form.email }}<input type="hidden" name="next" value="{{ request.path }}"><button>Join</button></form></div>
+    </div>
+    <div class="wrap footer-bottom"><span>&copy; {% now 'Y' %} Bookora AI</span><span>Made for readers, everywhere. <a href="{% url 'login' %}#admin-login">Admin Login</a></span></div>
+  </footer>
+  <script src="{% static 'store/site.js' %}" defer></script>
+  {% block page_scripts %}{% endblock %}
+</body>
+</html>

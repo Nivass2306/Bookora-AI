@@ -1,0 +1,8 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block title %}Ask Bookora | Bookora AI{% endblock %}
+{% block content %}
+<section class="page-heading wrap"><span class="eyebrow">CATALOGUE-GROUNDED BOOK HELP</span><h1>Ask Bookora</h1><p>Find books and compare their catalogue details. Answers only use the information Bookora has; unavailable facts are called out.</p></section>
+<section class="wrap chat-shell"><div class="chat-disclaimer"><strong>Bookora guide</strong><span>It can help discover books. It cannot place orders, change subscriptions, or grant reading access.</span></div><div class="chat-transcript" id="chat-transcript" aria-live="polite" aria-label="Conversation">{% for turn in chat_history %}<article class="chat-turn chat-user"><strong>You</strong><p>{{ turn.question }}</p></article><article class="chat-turn chat-assistant"><strong>Bookora</strong><p>{{ turn.answer }}</p></article>{% empty %}<div class="chat-welcome"><h2>What would you like to read?</h2><p>Try “Which beginner Python titles are in the catalogue?” or “Show free books about learning.”</p></div>{% endfor %}</div><form class="chat-form" id="bookora-chat-form" data-url="{% url 'bookstore_chat' %}">{% csrf_token %}<label class="sr-only" for="chat-message">Your book question</label><textarea id="chat-message" name="message" rows="2" maxlength="500" required placeholder="Ask about books, reading access, or audiobooks"></textarea><button class="button">Ask</button></form><p class="chat-help">Responses are recommendations, not access grants. Check book pages for current price and reading eligibility.</p></section>
+<script src="{% static 'store/chat.js' %}" defer></script>
+{% endblock %}

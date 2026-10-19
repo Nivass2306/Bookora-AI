@@ -1,0 +1,31 @@
+{% extends 'store/base.html' %}
+{% block title %}Your account | Bookora AI{% endblock %}
+{% block content %}
+<section class="page-heading wrap"><span class="eyebrow">YOUR BOOKORA</span><h1 class="account-greeting">Hello, {{ user.first_name|default:user.username }}</h1><p>Orders, reading access, saved books, and subscription status in one place.</p></section>
+<section class="section wrap account-grid">
+  <div class="account-main">
+    <section class="account-panel"><div class="section-head"><div><span class="eyebrow">SHOPPING HISTORY</span><h2>Your orders</h2></div></div>
+      {% for order in orders %}<article class="account-order"><div><a href="{% url 'order_success' order.reference %}"><strong>Order {{ order.reference|slice:':8' }}</strong></a><small>{{ order.created_at|date:'M j, Y' }} · {{ order.get_status_display }} · {{ order.get_payment_status_display }}</small></div><div><small>Print order · payment is separate from subscription access</small>{% for item in order.items.all %}<p>{{ item.title }} × {{ item.quantity }} <span>₹{{ item.price }}</span></p>{% endfor %}<strong>Total ₹{{ order.total }}</strong>{% if order.payment_status == 'succeeded' %}<p><a href="{% url 'physical_order_refund' order.reference %}">Request print-order refund review</a></p>{% endif %}</div></article>{% empty %}<p class="empty">Your print orders will be listed here.</p>{% endfor %}
+    </section>
+    <section class="account-panel"><div class="section-head"><div><span class="eyebrow">ONLINE READING</span><h2>Subscription &amp; payment history</h2></div><a class="text-link" href="{% url 'online_library' %}">Online Library →</a></div>
+      {% if current_subscription %}<p>{{ current_subscription.display_status }} · paid through {{ current_subscription.ends_at|date:'M j, Y H:i' }} UTC · grace ends {{ current_subscription.grace_ends_at|date:'M j, Y H:i' }} UTC.</p><a class="button button-outline" href="{% url 'subscription' %}">Review or manually renew</a>{% else %}<p class="muted">No verified active subscription. Reading progress and bookmarks remain saved after expiry.</p><a class="button button-outline" href="{% url 'subscription' %}">Subscription details</a>{% endif %}
+      <h3>Payment attempts</h3>{% for payment in subscription_payments %}<p>{{ payment.created_at|date:'M j, Y H:i' }} UTC · {{ payment.plan.name }} · ₹{{ payment.amount }} {{ payment.currency }} · {{ payment.get_status_display }}{% if payment.status == 'succeeded' %} · <a href="{% url 'subscription_refund' %}">Request review</a>{% endif %}</p>{% empty %}<p class="empty">No subscription payment attempts.</p>{% endfor %}
+      <h3>Refund requests</h3>{% for refund in refund_requests %}<p>{{ refund.created_at|date:'M j, Y' }} · ₹{{ refund.payment.amount }} · {{ refund.get_status_display }}</p>{% empty %}<p class="empty">No subscription refund requests.</p>{% endfor %}
+      <h3>Print-order refunds (separate)</h3>{% for refund in physical_refunds %}<p>Order {{ refund.order.reference|slice:':8' }} · {{ refund.get_status_display }}</p>{% empty %}<p class="empty">No print-order refund requests.</p>{% endfor %}
+    </section>
+    <section class="account-panel"><div class="section-head"><div><span class="eyebrow">DIGITAL ACCESS</span><h2>Your digital library</h2></div></div>
+      <p class="muted">Only separately verified digital entitlements appear here. Print and demo orders do not unlock reading.</p>
+      <div class="book-grid">{% for book in owned_books %}{% include 'store/_book_card.html' with show_read_action=True %}{% empty %}<p class="empty">Books with verified digital access will appear here. Demo checkout orders do not grant access.</p>{% endfor %}</div>
+    </section>
+    <section class="account-panel"><div class="section-head"><div><span class="eyebrow">PICK UP WHERE YOU LEFT OFF</span><h2>Reading history</h2></div></div>
+      {% for progress in reading_progress %}<p><a href="{% url 'reader' progress.book_id %}?section={{ progress.section_index }}">{{ progress.book.title }}</a> · section {{ progress.section_index|add:1 }} · {{ progress.updated_at|date:'M j' }}{% if progress.bookmark_section_index != None %}<span class="saved-bookmark"> · Bookmark: <a href="{% url 'reader' progress.book_id %}?section={{ progress.bookmark_section_index }}">section {{ progress.bookmark_section_index|add:1 }}</a></span>{% endif %}</p>{% empty %}<p class="empty">Your reading progress will be saved here when you read a digital title.</p>{% endfor %}
+    </section>
+  </div>
+  <section class="account-panel account-recommendations"><div class="section-head"><div><span class="eyebrow">BASED ON YOUR READING</span><h2>Recommended for you</h2></div><a class="text-link" href="{% url 'reading_companion' %}">Refine your picks →</a></div><div class="book-grid">{% for book in recommended_books %}{% include 'store/_book_card.html' %}{% empty %}<p class="empty">New recommendations will appear as the catalogue grows.</p>{% endfor %}</div></section>
+  <aside class="account-side account-panel"><span class="eyebrow">ONLINE READING</span>{% if active_subscription %}<h2>{{ active_subscription.display_status }}</h2><p>{{ active_subscription.plan.name }} paid through {{ active_subscription.ends_at|date:'M j, Y' }}. Grace ends {{ active_subscription.grace_ends_at|date:'M j, Y' }}.</p><a class="button" href="{% url 'online_library' %}">Open Online Library</a>{% else %}<h2>No active subscription</h2><p>Subscriptions are separate from print book purchases.</p><a class="button" href="{% url 'subscription' %}">Review subscription</a>{% endif %}
+    <h3>Your saved shelf</h3><a class="text-link" href="{% url 'wishlist' %}">Open wishlist →</a>
+    <h3>Account details</h3><form method="post" class="account-form">{% csrf_token %}<input type="hidden" name="profile_form" value="1">{{ profile_form.as_p }}<button class="button">Save details</button></form>
+    {% for sub in subscriptions %}<div class="subscription-history"><strong>{{ sub.plan.name }}</strong><span>{{ sub.display_status }} · paid period {{ sub.started_at|date:'M j, Y' }} – {{ sub.ends_at|date:'M j, Y' }} · grace ends {{ sub.grace_ends_at|date:'M j, Y' }}</span>{% endfor %}
+  </aside>
+</section>
+{% endblock %}
