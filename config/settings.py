@@ -1,3 +1,4 @@
+
 """
 Django settings for config project.
 
@@ -33,7 +34,8 @@ if not SECRET_KEY:
 
 
 # Allowed hosts
-# A leading dot allows the domain and its subdomains.
+# Allow the main Vercel domain and its subdomains.
+# For production, restrict this to your own domains when possible.
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
@@ -118,12 +120,6 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": (
             "django.contrib.auth.password_validation."
-            "CommonPasswordValidator"
-        ),
-    },
-    {
-        "NAME": (
-            "django.contrib.auth.password_validation."
             "NumericPasswordValidator"
         ),
     },
@@ -144,6 +140,8 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+
+# Login and logout redirects
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 LOGIN_URL = "login"
