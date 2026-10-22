@@ -4,5 +4,6 @@ __pycache__/
 db.sqlite3
 /media/
 /private_uploads/
+/staticfiles/
 .venv/
 venv/
